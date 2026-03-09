@@ -15,10 +15,10 @@ Assim, qualquer pesquisador ou avaliador poderá reproduzir **100% do pipeline a
 
 Para facilitar a integração direta com o **Google Looker Studio**, foram geradas duas versões da base de pesquisadores no diretório `data/processed/`:
 
-### `lattes_definitivos.csv`
+### `lattes_definitive.csv`
 Base original preservando a granularidade completa das áreas de atuação extraídas do currículo Lattes. Essa estrutura é estritamente necessária para manter a integridade com as matrizes matemáticas geradas nos notebooks.
 
-### `lattes_definitivos_looker.csv`
+### `lattes_looker_studio.csv`
 Versão transformada da base original com **redução de dimensionalidade categórica**, incluindo o agrupamento de categorias raras e a consolidação de perfis em grandes grupos (por exemplo: *Engenharia de Materiais*, *Engenharia de Alimentos* e *Biblioteconomia* foram condensadas na categoria *Técnico Administrativo*). 
 Essa transformação de negócio teve como objetivo melhorar a **clareza visual do dashboard**, simplificar os **filtros interativos** e reduzir o ruído analítico nas visualizações executivas.
 
