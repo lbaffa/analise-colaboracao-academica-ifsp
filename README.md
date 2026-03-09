@@ -138,7 +138,7 @@ O objetivo foi comparar a distribuição de similaridade das parcerias sugeridas
 
 Esses resultados demonstram como técnicas de **Análise de Redes Sociais (SNA)** combinadas com **Processamento de Linguagem Natural (NLP)** podem apoiar decisões estratégicas de gestão científica em instituições acadêmicas.
 
-![Evolução da Interdisciplinaridade](assets/img/interdisciplinarity_edges.png)
+![Evolução da Interdisciplinaridade](assets/img/interdisciplinary_edges.png)
 *(Evolução temporal do volume de colaborações absolutas versus o percentual de colaborações interdisciplinares).*
 
 > ⚠️ **Nota sobre os dados de 2025:** A ausência de arestas no ano de 2025 não reflete necessariamente uma queda real de produtividade, mas sim um viés temporal da janela de extração (coleta realizada no 1º trimestre de 2025). Para detalhes sobre o tratamento deste "buraco" sazonal, consulte as [Premissas de Negócio e Vieses da Base](docs/5_limitations_and_bias.md)
