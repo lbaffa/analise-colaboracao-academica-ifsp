@@ -329,7 +329,8 @@ python scriptLattes.py pirituba/scriptLattes_consolidado.config
 ```
 
 Essa execução gera as matrizes de colaboração e dados brutos utilizados posteriormente no pipeline analítico - contempla de 2016 a 2025.
-Abaixo, um exemplo de artefato visual bruto (ano de 2020) gerado nativamente pela ferramenta:
+
+Abaixo, um exemplo de artefato visual bruto gerado nativamente pela ferramenta ao executar-se apenas o ano de 2020:
 
 ![Grafo de colaborações gerado pelo módulo nativo do scriptLattes](assets/img/scriptLattes_graphs/collaboration_graph_2020.png)
 
