@@ -27,7 +27,7 @@ O projeto inclui uma aplicação web interativa desenvolvida com `Sigma.js` para
 
 Experimente a aplicação rodando em produção diretamente no seu navegador:
 
-🔗 **[Acessar Aplicação](https://lbaffa.github.io/analise-colaboracao-academica-ifsp/)**
+🔗 **[Acessar Aplicação](https://lbaffa.github.io/analise-colaboracao-academica-ifsp/)** 
 
 ---
 
