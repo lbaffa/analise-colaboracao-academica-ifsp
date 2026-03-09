@@ -1,0 +1,8 @@
+beautifulsoup4
+numpy
+Pillow
+# pygraphviz
+python_Levenshtein
+scipy
+selenium
+tqdm

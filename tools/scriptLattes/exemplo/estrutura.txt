@@ -1,0 +1,15 @@
+Listagem de caminhos de pasta
+O n£mero de s‚rie do volume ‚ 88CC-4966
+C:.
+    estrutura.txt
+    qualis_computacao_conferencias_2012.csv
+    qualis_periodicos_janeiro_2023.csv
+    relacao_lattes.list
+    scriptlattes_anual_template.config
+    teste-01.config
+    teste-01.list
+    teste-02.config
+    teste-02.list
+    
+NÆo existem subpastas 
+

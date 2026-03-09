@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Colaborações preexistentes</title>
+  <script type="importmap">
+      {
+        "imports": {
+          "sigma": "https://cdnjs.cloudflare.com/ajax/libs/sigma.js/3.0.0/sigma.min.js",
+          "graphology": "https://cdn.jsdelivr.net/npm/graphology@0.26.0/dist/graphology.umd.min.js",
+          "graphologyLibrary": "https://cdn.jsdelivr.net/npm/graphology-library/dist/graphology-library.min.js",
+          "@sigma/node-image": "https://cdn.jsdelivr.net/npm/@sigma/node-image@3.0.0/+esm"
+        }
+      } 
+    </script>
+  <script src="js/publicationsParser.js"></script>
+
+  <style>
+    #legendPanel {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: white;
+      padding: 15px 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 10px;   /* Espaço extra entre as colunas */
+      row-gap: 13px;      /* Espaço entre a linha 1 e a linha 2 */
+      width: 80%;         /* Usa quase toda a largura do ecrã */
+      max-width: 1300px;  /* Limite de segurança para ecrãs gigantes */
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 11px;     
+      min-width: 130px;
+    }
+    .legend-color-box {
+      width: 15px;
+      height: 15px;
+      border: 1px solid #ccc;
+      margin-right: 5px;
+      display: inline-block;
+    }
+  </style>
+  </head>
+
+<body style="background: lightgrey">
+
+  <div id="legendPanel">
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #990000;"></span> Biologia
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #330000;"></span> Física
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #cc9999;"></span> Gestão
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #ffccff;"></span> Informática
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #999933;"></span> Letras
+    </span>
+	<span class="legend-item">
+      <span class="legend-color-box" style="background-color: #339966;"></span> Matemática
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #00cc99;"></span> Pedagogia
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #0033ff;"></span> Filosofia/Sociologia
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #000000;"></span> Técnico Administrativo
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #330099;"></span> Geografia
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #000099;"></span> Artes
+    </span>
+	<span class="legend-item">
+      <span class="legend-color-box" style="background-color: #FF99CC;"></span> História
+    </span>
+    <span class="legend-item">
+      <span class="legend-color-box" style="background-color: #FF33CC;"></span> Direito
+    </span>
+      <span class="legend-color-box" style="background-color: #cccccc;"></span> Outros
+    </span>
+  </div>
+  <button id="toggleFilters" style="position: absolute; top: 120px; left: 470px; z-index: 1001; background: #007cba; color: white; border: none; padding: 8px 12px; border-radius: 3px; cursor: pointer; font-family: Arial, sans-serif;">
+    🔍 Ocultar Filtros
+  </button>
+
+  
+  <a href="index_sugestoes.html"
+   style="position: absolute;
+          top: 10px;
+          right: 15px;
+          z-index: 1001;
+          background: #007cba;
+          color: white;
+          padding: 5px 10px;      /* menor */
+          border-radius: 4px;     /* levemente menor */
+          text-decoration: none;
+          font-family: Arial, sans-serif;
+          font-size: 13px;        /* menor texto */
+          font-weight: 600;       /* menos pesado que bold */
+          box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          transition: background 0.3s;">
+  ⬅ Sugestões de Colaborações
+</a>
+  <div id="filterPanel" style="position: absolute; top: 120px; left: 10px; z-index: 1000; background: white; padding: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-family: Arial, sans-serif; max-width: 450px;">
+    <h3 style="margin: 0 0 10px 0;">Filtros</h3>
+    
+    <div style="margin-bottom: 10px;">
+      <label for="nameFilter">Filtrar pelo nome:</label>
+      <input type="text" id="nameFilter" placeholder="Digite o nome..." style="width: 200px; margin-left: 5px;">
+    </div>
+    
+    <div style="margin-bottom: 10px;">
+      <label for="colorFilter">Filtrar pela área:</label>
+      <select id="colorFilter" style="margin-left: 5px; width: 150px;">
+        <option value="">Todas as áreas</option>
+        <option value="#990000">Biologia</option>
+        <option value="#330000">Física</option>
+        <option value="#cc9999">Gestão</option>
+        <option value="#ffccff">Informática</option>
+        <option value="#999933">Letras</option>
+		<option value="#339966">Matemática</option>
+        <option value="#00cc99">Pedagogia</option>
+        <option value="#0033ff">Filosofia/Sociologia</option>
+        <option value="#000000">Técnico Administrativo</option>
+        <option value="#330099">Geografia</option>
+        <option value="#000099">Artes</option>
+		<option value="#FF99CC">História</option>
+        <option value="#FF33CC">Direito</option>
+		<option value="#cccccc">Outros</option>
+      </select>
+    </div>
+    
+    <div style="margin-bottom: 10px;">
+      <label>
+        <input type="checkbox" id="showNeighbors" checked> 
+        Mostrar vizinhos
+      </label>
+    </div>
+    
+    <button id="resetFilter" style="background: #007cba; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Reiniciar a visualização</button><br><br>
+    <i>Clique sobre as arestas para visualizar as publicações dos pares de pesquisadores.</i>
+  </div>
+  
+  <div id="publicationsDialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-width: 80%; max-height: 80%; font-family: Arial, sans-serif; flex-direction: column;">
+    <div style="padding: 20px; border-bottom: 1px solid #ddd; background: #f5f5f5;">
+      <h3 id="dialogTitle" style="margin: 0; color: #333;">Publicações</h3>
+      <button id="closeDialog" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
+    </div>
+    <div id="dialogContent" style="padding: 20px; overflow-y: auto; flex: 1;">
+      <div id="collaborationInfo" style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border-radius: 5px;">
+        <strong>Pesquisadores:</strong> <span id="authorNames"></span><br>
+        <br>
+        <i>As publicações foram selecionadas a partir da coocorrência dos trabalhos dos pesquisadores.</i>
+      </div>
+      <div id="publicationsList"></div>
+    </div>
+  </div>
+  
+  <div id="dialogOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999;"></div>
+  
+  <div id="container" style="width: 100%; height: 1200px; background: white"></div>
+  <script type="module">
+    import * as sigma from 'sigma';
+    import 'graphology'; // has no exports, import all
+    import 'graphologyLibrary'; // has no exports, import all
+    import { NodeImageProgram } from '@sigma/node-image'; // Import image node support
+    import './js/graph.js'; // Import your local graph.js file directly
+	import { nodeList } from './js/preexistentes/researchesNodes.js';  // Import the nodeList array
+    import { edgeList } from './js/preexistentes/researchesEdges.js'; // Import the edgeList array
+
+    // Create a graphology.js graph, use random to init the graph
+    const graph = new graphology.Graph()
+    
+    // Use the createNodes function to create all nodes from the nodeList
+    createNodes(graph, nodeList);  
+    createEdges(graph, edgeList); // Use the createEdges function to create all edges from the edgeList  
+    
+    // Apply nooverlap layout to prevent node overlapping
+    // First, set random initial positions for the nooverlap algorithm to work with
+    graph.nodes().forEach((node) => {
+      graph.setNodeAttribute(node, "x", Math.random() * 800);
+      graph.setNodeAttribute(node, "y", Math.random() * 600);
+    });
+    
+    // Apply nooverlap layout to prevent node overlapping
+    // First, set random initial positions for the nooverlap algorithm to work with
+    graph.nodes().forEach((node) => {
+      graph.setNodeAttribute(node, "x", Math.random() * 800);
+      graph.setNodeAttribute(node, "y", Math.random() * 600);
+    });
+    
+    // Apply nooverlap layout
+    graphologyLibrary.layoutNoverlap.assign(graph, {
+      maxIterations: 500,
+      settings: {
+        margin: 8,
+        expansion: 1.2,
+        gridSize: 20,
+        speed: 3
+      }
+    });
+    
+    
+    // Infer settings from graph & assign
+    const settings = graphologyLibrary.layoutForceAtlas2.inferSettings(graph);
+    graphologyLibrary.layoutForceAtlas2.assign(graph, {
+      iterations: 50,
+      settings: settings
+    });
+    
+
+    // Instantiate sigma.js with image node support and render the graph
+    const s = new Sigma(graph, document.getElementById("container"), {
+      nodeProgramClasses: {
+        image: NodeImageProgram,        
+      },
+      renderEdgeLabels: true,
+      edgeLabelSize: 14,
+      edgeLabelColor: { color: '#000000' },
+      labelColor: { attribute: 'labelColor' },
+      // Enable edge interactions explicitly
+      enableEdgeEvents: true,
+      allowInvalidContainer: true
+    });
+
+    // Enable node dragging functionality
+    let isDragging = false;
+    let draggedNode = null;
+
+    // Mouse down event - start dragging
+    s.on("downNode", (e) => {
+      isDragging = true;
+      draggedNode = e.node;
+      
+      // Disable camera controls while dragging
+      s.getCamera().disable();
+    });
+
+    // Mouse move event - update node position while dragging
+    s.getMouseCaptor().on("mousemove", (e) => {
+      if (isDragging && draggedNode) {
+        // Get the mouse position in graph coordinates
+        const pos = s.viewportToGraph(e);
+        
+        // Update the node position
+        graph.setNodeAttribute(draggedNode, "x", pos.x);
+        graph.setNodeAttribute(draggedNode, "y", pos.y);
+        
+        // Prevent default camera behavior
+        e.preventSigmaDefault();
+        e.original.preventDefault();
+        e.original.stopPropagation();
+      }
+    });
+
+    // Mouse up event - stop dragging
+    s.getMouseCaptor().on("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        draggedNode = null;
+        
+        // Re-enable camera controls
+        s.getCamera().enable();
+      }
+    });
+
+    // Handle mouse leave to stop dragging if mouse leaves the container
+    s.getMouseCaptor().on("mouseleave", () => {
+      if (isDragging) {
+        isDragging = false;
+        draggedNode = null;
+        s.getCamera().enable();
+      }
+    });
+
+    // === NODE FILTERING WITH ADJACENT NODES ===
+    
+    /**
+     * Gets all neighbors (adjacent nodes) of a given node
+     * @param {string} nodeId - The ID of the node to get neighbors for
+     * @returns {Set} Set of neighbor node IDs
+     */
+    function getNeighbors(nodeId) {
+      const neighbors = new Set();
+      
+      // Get all edges connected to this node
+      graph.forEachEdge(nodeId, (edge, attributes, source, target) => {
+        // Add the other node (not the current one) as a neighbor
+        if (source === nodeId) {
+          neighbors.add(target);
+        } else {
+          neighbors.add(source);
+        }
+      });
+      
+      return neighbors;
+    }
+
+    /**
+     * Applies filters to the graph, optionally showing adjacent nodes
+     * @param {string} nameFilter - Filter by node name (case-insensitive)
+     * @param {string} colorFilter - Filter by exact node color
+     * @param {number} sizeFilter - Minimum node size
+     * @param {boolean} showNeighbors - Whether to show adjacent nodes of filtered results
+     */
+    function applyFilters(nameFilter = '', colorFilter = '', sizeFilter = 1, showNeighbors = true) {
+      const nodesToShow = new Set();
+      
+      // First pass: find nodes that match the filters directly
+      graph.forEachNode((node, attributes) => {
+        let matches = true;
+        
+        // Name filter (case-insensitive partial match)
+        if (nameFilter && !attributes.label.toLowerCase().includes(nameFilter.toLowerCase())) {
+          matches = false;
+        }
+        
+        // Color filter (exact match)
+        if (colorFilter && attributes.color !== colorFilter) {
+          matches = false;
+        }
+        
+        // Size filter (minimum size)
+        if (attributes.size < sizeFilter) {
+          matches = false;
+        }
+        
+        if (matches) {
+          nodesToShow.add(node);
+        }
+      });
+      
+      // Second pass: if showNeighbors is enabled, add adjacent nodes
+      if (showNeighbors) {
+        const originalMatches = new Set(nodesToShow);
+        for (const nodeId of originalMatches) {
+          const neighbors = getNeighbors(nodeId);
+          neighbors.forEach(neighbor => nodesToShow.add(neighbor));
+        }
+      }
+      
+      // Apply visibility to all nodes
+      graph.forEachNode((node) => {
+        const shouldShow = nodesToShow.has(node);
+        graph.setNodeAttribute(node, 'hidden', !shouldShow);
+      });
+      
+      // Hide edges that connect to hidden nodes
+      graph.forEachEdge((edge, attributes, source, target) => {
+        const sourceVisible = !graph.getNodeAttribute(source, 'hidden');
+        const targetVisible = !graph.getNodeAttribute(target, 'hidden');
+        graph.setEdgeAttribute(edge, 'hidden', !(sourceVisible && targetVisible));
+      });
+      
+      // Refresh the sigma renderer
+      s.refresh();
+      
+      // Log filter results for debugging
+      console.log(`Filter applied: ${nodesToShow.size} nodes visible`);
+    }
+
+    /**
+     * Resets all filters and shows all nodes and edges
+     */
+    function resetFilters() {
+      graph.forEachNode((node) => {
+        graph.setNodeAttribute(node, 'hidden', false);
+      });
+      
+      graph.forEachEdge((edge) => {
+        graph.setEdgeAttribute(edge, 'hidden', false);
+      });
+      
+      s.refresh();
+      console.log('All filters reset - showing all nodes');
+    }
+
+    // Set up filter event listeners
+    const nameFilterInput = document.getElementById('nameFilter');
+    const colorFilterSelect = document.getElementById('colorFilter');
+    const showNeighborsCheckbox = document.getElementById('showNeighbors');
+    const resetButton = document.getElementById('resetFilter');
+    const toggleButton = document.getElementById('toggleFilters');
+    const filterPanel = document.getElementById('filterPanel');
+
+    // Toggle filter panel visibility
+    let filtersVisible = true;
+    toggleButton.addEventListener('click', () => {
+      filtersVisible = !filtersVisible;
+      if (filtersVisible) {
+        filterPanel.style.display = 'block';
+        toggleButton.textContent = '🔍 Ocultar Filtros';
+      } else {
+        filterPanel.style.display = 'none';
+        toggleButton.textContent = '🔍 Mostrar Filtros';
+      }
+    });
+
+    // Handle filter changes
+    function handleFilterChange() {
+      const nameFilter = nameFilterInput.value.trim();
+      const colorFilter = colorFilterSelect.value;
+      const showNeighbors = showNeighborsCheckbox.checked;
+      
+      // If no filters are applied, show all nodes
+      if (nameFilter === '' && colorFilter === '') {
+        resetFilters();
+      } else {
+        applyFilters(nameFilter, colorFilter, /* sizeFilter */ 1, showNeighbors);
+      }
+    }
+
+    // Add event listeners
+    nameFilterInput.addEventListener('input', handleFilterChange);
+    colorFilterSelect.addEventListener('change', handleFilterChange);
+    showNeighborsCheckbox.addEventListener('change', handleFilterChange);
+    
+    resetButton.addEventListener('click', () => {
+      nameFilterInput.value = '';
+      colorFilterSelect.value = '';
+      showNeighborsCheckbox.checked = true;
+      resetFilters();
+    });
+
+    // Add some helpful keyboard shortcuts
+    // === PUBLICATIONS DATA AND DIALOG HANDLING ===
+    
+    // Global variable to store publications data
+    let publicationsData = [];
+    
+    // Load publications data
+    async function loadPublicationsData() {
+      try {
+        const response = await fetch('files/publicacoesPorMembro_.csv');
+        const csvContent = await response.text();
+        publicationsData = parsePublicationsCSV(csvContent);
+        console.log("Publications data loaded:", publicationsData.length, "publications");
+      } catch (error) {
+        console.error("Error loading publications data:", error);
+      }
+    }
+    
+    // Initialize publications data
+    loadPublicationsData();
+    
+    // Dialog handling functions
+    function showPublicationsDialog(authorNames, filteredPublications) {
+      const dialog = document.getElementById('publicationsDialog');
+      const overlay = document.getElementById('dialogOverlay');
+      const authorNamesSpan = document.getElementById('authorNames');
+      const publicationsList = document.getElementById('publicationsList');
+      
+      // Set collaboration info
+      authorNamesSpan.textContent = authorNames.join(' & ');
+      
+      // Generate publications list HTML
+      if (filteredPublications.length === 0) {
+        // Exibe a lista de motivos quando não há publicações diretas
+        publicationsList.innerHTML = `
+          <div style="padding: 10px; color: #333;">
+            <p style="font-weight: bold; margin-bottom: 10px;">Colaboração detectada por uma produção entre os seguintes tipos:</p>
+            <ul style="list-style-type: disc; padding-left: 20px; margin: 0; line-height: 1.5;">
+              <li>Livros publicados/organizados ou edições;</li>
+              <li>Capítulos de livros publicados;</li>
+              <li>Textos em jornais de notícias/revistas;</li>
+              <li>Resumos publicados em anais de congressos;</li>
+              <li>Artigos aceitos para publicação;</li>
+              <li>Apresentações de trabalho;</li>
+              <li>Demais tipos de produção bibliográfica.</li>
+            </ul>
+          </div>
+        `;
+      } else {
+        let html = `<p><strong>Encontradas ${filteredPublications.length} publicações:</strong></p><ul style="list-style-type: none; padding: 0;">`;
+        
+        filteredPublications.forEach((pub, index) => {
+          html += `
+            <li style="margin-bottom: 15px; padding: 10px; border-left: 3px solid #007cba; background: #f9f9f9;">
+              <strong style="color: #007cba;">[${pub.type}]</strong> ${pub.title}<br>
+              <small style="color: #666;"><strong>Autor:</strong> ${pub.author} | <strong>Ano:</strong> ${pub.year}</small>
+            </li>
+          `;
+        });
+        
+        html += '</ul>';
+        publicationsList.innerHTML = html;
+      }
+      
+      // Show dialog
+      overlay.style.display = 'block';
+      
+      dialog.style.display = 'flex';
+    }
+    
+    function hidePublicationsDialog() {
+      const dialog = document.getElementById('publicationsDialog');
+      const overlay = document.getElementById('dialogOverlay');
+      
+      overlay.style.display = 'none';
+      dialog.style.display = 'none';
+    }
+    
+    // Add dialog close event listeners
+    document.getElementById('closeDialog').addEventListener('click', hidePublicationsDialog);
+    document.getElementById('dialogOverlay').addEventListener('click', hidePublicationsDialog);
+    
+    // Close dialog with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hidePublicationsDialog();
+        // Don't clear name filter if dialog is open
+        if (document.getElementById('publicationsDialog').style.display === 'none') {
+          nameFilterInput.value = '';
+          handleFilterChange();
+        }
+      }
+      // Press 'R' to reset filters
+      if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey) {
+        if (document.activeElement !== nameFilterInput) {
+          resetButton.click();
+        }
+      }
+    });
+
+    // === EDGE CLICK DETECTION AND PUBLICATION FILTERING ===
+    
+    // Function to handle edge click and filter publications
+    function handleEdgeClick(edgeId) {
+      if (publicationsData.length === 0) {
+        alert("Dados de publicações ainda não foram carregados. Tente novamente em alguns segundos.");
+        return;
+      }
+      
+      const edgeAttr = graph.getEdgeAttributes(edgeId);
+      const source = graph.source(edgeId);
+      const target = graph.target(edgeId);
+      const label = edgeAttr.label || '';
+      
+      console.log("Processing edge click:", {
+        edge: edgeId,
+        source: source,
+        target: target,
+        label: label
+      });
+      
+      // Prepare author names and search terms
+      const authorNames = [source, target];
+      const titleTerms = label.trim() ? label.split(/[,\s]+/).filter(term => term.length > 2) : [];
+      
+      console.log("Filtering publications with:", {
+        authorNames: authorNames,
+        titleTerms: titleTerms
+      });
+      
+      // 1) Agrupa publicações para eliminar duplicatas e agregar autores
+      const groupedPublications = groupPublicationsByTitleYear(publicationsData);
+      console.log("Grouped publications:", groupedPublications.length);
+      
+      // 2) Usa a função criada anteriormente para filtrar pelas publicações que contenham o par de autores
+      //    Pedimos authorLogic: 'AND' para garantir que ambas as pessoas estejam presentes.
+      let filteredPublications = [];
+      if (typeof filterPublicationsByMultipleAuthorsAndTerms === 'function') {
+        filteredPublications = filterPublicationsByMultipleAuthorsAndTerms(
+          groupedPublications,
+          authorNames,
+          titleTerms,
+          {
+            authorLogic: 'AND',
+            titleLogic: 'OR',
+            caseSensitive: false
+          }
+        );
+      } else {
+        // fallback: filtrar manualmente se a função não existir
+        filteredPublications = groupedPublications.filter(pub => {
+          const publicationAuthors = (pub.author || '').toLowerCase().split(/[,;]+/).map(a => a.trim());
+          return authorNames.every(a => publicationAuthors.some(pa => pa === a.toLowerCase() || pa.includes(a.toLowerCase())));
+        }).filter(pub => {
+          if (titleTerms.length === 0) return true;
+          const t = (pub.title || '').toLowerCase();
+          return titleTerms.some(term => t.includes(term.toLowerCase()));
+        });
+      }
+      
+      console.log("Filtered publications result:", filteredPublications.length, "publications found");
+      
+      // Show the dialog with results
+      showPublicationsDialog(authorNames, filteredPublications);
+    }
+    
+    /**
+     * Agrupa publicações por título + ano (normalizados) para eliminar duplicatas
+     * e agregar a lista de autores.
+     * @param {Array} pubs - array de publicações {title, author, year, type, ...}
+     * @returns {Array} publicações agrupadas
+     */
+    function groupPublicationsByTitleYear(pubs) {
+      const map = new Map();
+      pubs.forEach(pub => {
+        const title = (pub.title || '').trim().toLowerCase();
+        const year = (pub.year || '').toString().trim();
+        const key = `${title}||${year}`;
+        if (!map.has(key)) {
+          // copie alguns campos e normalize authors como array
+          const authorsArray = (pub.author || '').split(/[,;]+/).map(a => a.trim()).filter(Boolean);
+          map.set(key, {
+            title: pub.title || '',
+            year: pub.year || '',
+            type: pub.type || '',
+            // mantenha authors como string (parser pode esperar string) mas agregue nomes únicos
+            author: Array.from(new Set(authorsArray)).join(', ')
+          });
+        } else {
+          // agregar autores caso já exista a entrada
+          const existing = map.get(key);
+          const existingAuthors = existing.author.split(/[,;]+/).map(a => a.trim()).filter(Boolean);
+          const newAuthors = (pub.author || '').split(/[,;]+/).map(a => a.trim()).filter(Boolean);
+          const combined = Array.from(new Set([...existingAuthors, ...newAuthors]));
+          existing.author = combined.join(', ');
+          map.set(key, existing);
+        }
+      });
+      return Array.from(map.values());
+    }
+
+    // Debug: Check Sigma instance methods and events
+    console.log("Sigma instance methods:", Object.getOwnPropertyNames(s));
+    console.log("Sigma instance events:", s.getListeners ? s.getListeners() : "getListeners not available");
+    
+    // Try multiple approaches to detect edge clicks
+    
+    // Approach 1: Try clickEdge event
+    try {
+      s.on("clickEdge", (event) => {
+        console.log("clickEdge event fired:", event.edge);
+        handleEdgeClick(event.edge);
+      });
+      console.log("clickEdge event listener added successfully");
+    } catch (e) {
+      console.log("clickEdge event not supported:", e.message);
+    }
+    
+    // Approach 2: Try enterEdge/leaveEdge for hover detection
+    try {
+      let hoveredEdge = null;
+      
+      s.on("enterEdge", (event) => {
+        hoveredEdge = event.edge;
+        console.log("enterEdge event fired:", event.edge);
+        document.body.style.cursor = 'pointer';
+      });
+      
+      s.on("leaveEdge", (event) => {
+        hoveredEdge = null;
+        console.log("leaveEdge event fired:", event.edge);
+        document.body.style.cursor = 'default';
+      });
+      
+      // Click when hovering over edge
+      s.on("clickStage", (event) => {
+        if (hoveredEdge && !isDragging) {
+          console.log("Clicked while hovering edge:", hoveredEdge);
+          handleEdgeClick(hoveredEdge);
+          event.preventSigmaDefault();
+        }
+      });
+      
+      console.log("enterEdge/leaveEdge event listeners added successfully");
+    } catch (e) {
+      console.log("enterEdge/leaveEdge events not supported:", e.message);
+    }
+    
+    // Approach 3: Try alternative event names
+    const edgeEventNames = ['edgeClick', 'edge-click', 'click-edge', 'overEdge', 'outEdge'];
+    edgeEventNames.forEach(eventName => {
+      try {
+        s.on(eventName, (event) => {
+          console.log(`${eventName} event fired:`, event);
+          if (event.edge) {
+            handleEdgeClick(event.edge);
+          }
+        });
+        console.log(`${eventName} event listener added`);
+      } catch (e) {
+        // Silently fail for unsupported events
+      }
+    });
+    
+    // Approach 4: Check if edges need to be manually made interactive
+    console.log("Setting all edges as interactive...");
+    graph.forEachEdge((edgeId) => {
+      try {
+        graph.setEdgeAttribute(edgeId, 'interactive', true);
+        graph.setEdgeAttribute(edgeId, 'hoverable', true);
+        graph.setEdgeAttribute(edgeId, 'clickable', true);
+      } catch (e) {
+        // These properties might not exist
+      }
+    });
+    
+    console.log("Available Sigma events:", Object.getOwnPropertyNames(s.__proto__));
+    
+    </script>
+</body>
+
+</html>
