@@ -11,6 +11,24 @@
 
 # 🌐 Análise de Colaboração Acadêmica - IFSP Pirituba
 
+## 🚀 Resumo do Projeto
+
+**Problema:** Baixa visibilidade sobre a colaboração acadêmica interna, dificultando a identificação de parcerias estratégicas.
+
+**Solução:** Desenvolvimento de um pipeline completo de Data Science combinando NLP e Análise de Redes para mapear relações existentes e recomendar novas colaborações.
+
+**Resultados:**
+- Apenas 23% dos pesquisadores colaboram internamente
+- 80% das colaborações não persistem ao longo do tempo
+- Sistema de recomendação validado com d de Cohen ≈ 0.01
+- Desenvolvimento de uma aplicação web interativa para exploração dos grafos de colaboração (reais vs sugeridos)
+- Construção de dashboard executivo no Looker Studio para análise institucional
+
+**Impacto:**
+Ferramenta capaz de apoiar decisões estratégicas em gestão acadêmica, identificando oportunidades reais de colaboração e padrões estruturais da rede de pesquisa.
+
+---
+
 Projeto de Data Science que utiliza **Processamento de Linguagem Natural (NLP), Análise de Redes Sociais (SNA) e Estatística Descritiva** para mapear, analisar e sugerir colaborações acadêmicas entre servidores (docentes e técnicos administrativos) dentro de uma instituição de ensino superior (IFSP — Câmpus Pirituba). O projeto culminou no desenvolvimento de um sistema de recomendação de novas parcerias, fornecendo métricas topológicas para apoiar a tomada de decisão e a gestão estratégica institucional.
 
 *Projeto de Iniciação Científica desenvolvido no IFSP — Câmpus Pirituba.*
