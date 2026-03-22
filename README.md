@@ -18,11 +18,11 @@
 **Solução:** Desenvolvimento de um pipeline completo de Data Science combinando NLP e Análise de Redes para mapear relações existentes e recomendar novas colaborações.
 
 **Resultados:**
-- Apenas 23% dos pesquisadores colaboram internamente
-- 80% das colaborações não persistem ao longo do tempo
-- Sistema de recomendação validado com d de Cohen ≈ 0.01
-- Desenvolvimento de uma aplicação web interativa para exploração dos grafos de colaboração (reais vs sugeridos)
-- Construção de dashboard executivo no Looker Studio para análise institucional
+- Apenas 23% dos pesquisadores colaboram internamente.
+- 80% das colaborações não persistem ao longo do tempo.
+- Sistema de recomendação validado com d de Cohen ≈ 0.01.
+- Desenvolvimento de uma aplicação web interativa para exploração dos grafos de colaboração (colaborações reais vs sugeridas).
+- Construção de dashboard executivo no Looker Studio para análise institucional.
 
 **Impacto:**
 Ferramenta capaz de apoiar decisões estratégicas em gestão acadêmica, identificando oportunidades reais de colaboração e padrões estruturais da rede de pesquisa.
