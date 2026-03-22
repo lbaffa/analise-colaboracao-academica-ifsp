@@ -57,6 +57,8 @@ Para democratizar o acesso aos *insights* gerados pelas métricas de produtivida
 
 ![Dashboard Looker Studio](assets/demo/dashboard_screenshot.png)
 
+📌 Versão alternativa do dashboard desenvolvida em Power BI disponível em repositório separado:  
+🔗 **[Acessar versão em Power BI](https://github.com/lbaffa/dashboard-powerbi-colaboracao-academica.git)**
 ---
 
 ## 🎯 Destaques Analíticos
